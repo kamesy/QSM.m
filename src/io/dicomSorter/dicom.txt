@@ -1,0 +1,4 @@
+(0008,103E)	LO	SeriesDescription	1
+(0018,1030)	LO	ProtocolName	1
+(0020,0011)	IS	SeriesNumber	1
+(0020,0012)	IS	AcquisitionNumber	1

@@ -1,0 +1,46 @@
+(0008,0008)	CS	ImageType	2-n
+(0008,0070)	LO	Manufacturer	1
+(0008,103E) LO  SeriesDescription   1
+(0008,9208)	CS	ComplexImageComponent	1
+(0018,0023)	CS	MRAcquisitionType	1
+(0018,0050)	DS	SliceThickness	1
+(0018,0080)	DS	RepetitionTime	1
+(0018,0081)	DS	EchoTime	1
+(0018,0084)	DS	ImagingFrequency	1
+(0018,0086)	IS	EchoNumber	1-n
+(0018,0087)	DS	MagneticFieldStrength	1
+(0018,0088)	DS	SpacingBetweenSlices	1
+(0018,0091)	IS	EchoTrainLength	1
+(0018,1030)	LO	ProtocolName	1
+(0018,1314)	DS	FlipAngle	1
+(0018,5100)	CS	PatientPosition	1
+(0020,0011)	IS	SeriesNumber	1
+(0020,0012)	IS	AcquisitionNumber	1
+(0020,0013)	IS	InstanceNumber	1
+(0020,0032)	DS	ImagePositionPatient	3
+(0020,0037)	DS	ImageOrientationPatient	6
+(0020,1041)	DS	SliceLocation	1
+(0028,0010)	US	Rows	1
+(0028,0011)	US	Columns	1
+(0028,0030)	DS	PixelSpacing	2
+(0028,1052)	DS	RescaleIntercept	1
+(0028,1053)	DS	RescaleSlope	1
+(0040,9224)	FD	RealWorldValueIntercept	1
+(0040,9225)	FD	RealWorldValueSlope	1
+
+# Philips
+(2001,100A) IS  SliceNumber 1
+(2001,100B) CS  SliceOrientation    1
+(2001,1018) SL  NumberOfSlices  1
+(2005,1011) CS  MRImageType 1-n
+(2005,100E) FL  ScaleSlope  1
+
+# GE
+(0019,107E) SS  NumberOfEchoes  1
+(0021,104F) SS  LocationsInAcquisition  1
+(0021,1051) SS  RotationFromSourceX  1
+(0021,1052) SS  RotationFromSourceY  1
+(0021,1053) SS  RotationFromSourceZ  1
+(0043,102F) SS  ImageTypeGE 1
+(0043,1079) US  SlicesPerVolume 1
+(2001,1051) US  NumberOfSlicesPerVolume 1

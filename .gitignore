@@ -1,0 +1,14 @@
+*~
+*.swp
+*.swo
+.vscode/
+tags
+
+*.asv
+*.m~
+
+*.mex*
+
+*.mat
+*.nii
+*.nii.gz
