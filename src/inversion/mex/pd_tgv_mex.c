@@ -183,7 +183,7 @@ mx_pdf(struct PD *mxpd,
     const double tau = 1/sqrt(K2);
     const double sigma = 1/(tau*K2);
 
-    #pragma omp parallel for simd private(l) schedule(static)
+    #pragma omp parallel for private(l) schedule(static)
     for(l = 0; l < N; l += 1) {
         f[l] = ((float)sigma)*f[l];
     }
@@ -202,7 +202,7 @@ mx_pdf(struct PD *mxpd,
     for(i = 0; i < maxiter; ++i) {
 
         if (((i+1) % CONVERGENCE_MOD) == 0) {
-            #pragma omp parallel for simd private(l) schedule(static)
+            #pragma omp parallel for private(l) schedule(static)
             for(l = 0; l < N; l += 1) {
                 chi0[l] = chi[l];
                 eta0[l] = eta[l];
@@ -277,7 +277,7 @@ mx_pdd(struct PD *mxpd,
     const double tau = 1/sqrt(K2);
     const double sigma = 1/(tau*K2);
 
-    #pragma omp parallel for simd private(l) schedule(static)
+    #pragma omp parallel for private(l) schedule(static)
     for(l = 0; l < N; l += 1) {
         f[l] = sigma*f[l];
     }
@@ -296,7 +296,7 @@ mx_pdd(struct PD *mxpd,
     for(i = 0; i < maxiter; ++i) {
 
         if (((i+1) % CONVERGENCE_MOD) == 0) {
-            #pragma omp parallel for simd private(l) schedule(static)
+            #pragma omp parallel for private(l) schedule(static)
             for(l = 0; l < N; l += 1) {
                 chi0[l] = chi[l];
                 eta0[l] = eta[l];
@@ -992,7 +992,7 @@ convergence_checkd(double *nr1, double *nr2,
 
     /* can do naive summation for this */
     /* pairwise summation norm is with the multigrid stuff */
-    #pragma omp parallel for simd private(l) \
+    #pragma omp parallel for private(l) \
         reduction(+: n1, n2, d1, d2) schedule(static)
     for(l = 0; l < N; l += 1) {
         d1 += chi[l]*chi[l];
@@ -1026,7 +1026,7 @@ convergence_checkf(double *nr1, double *nr2,
 
     /* can do naive summation for this */
     /* pairwise summation norm is with the multigrid stuff */
-    #pragma omp parallel for simd private(l) \
+    #pragma omp parallel for private(l) \
         reduction(+: n1, n2, d1, d2) schedule(static)
     for(l = 0; l < N; l += 1) {
         d1 += ((double)chi[l]) * ((double)chi[l]);
