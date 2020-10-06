@@ -1,48 +1,78 @@
-function [u] = homodyne(u, n)
-%HOMODYNE [u] = homodyne(u, n)
+function [u] = homodyne(u, n, wname, sigma)
+%HOMODYNE [u] = homodyne(u, n, [wname, sigma])
 
-    narginchk(2, 2)
+    narginchk(2, 4)
+
+    if nargin < 4, sigma = [0.25, 0.25]; end
+    if nargin < 3 || isempty(wname), wname = 'hann'; end
+
+    wname = validatestring(wname, {'hann', 'hamming', 'gaussian'}, 3);
 
     if length(n) == 1, n = [n, n]; end
+    if length(sigma) == 1, sigma = [sigma, sigma]; end
+
     if n(1) > size(u, 1), n = [size(u, 1), n(2)]; end
     if n(2) > size(u, 2), n = [n(1), size(u, 2)]; end
 
 
-    w = hann2d(size(u), n);
+    w = window_(size(u), n, wname, sigma);
 
-    for t = size(u, 4):-1:1
-        for k = size(u, 3):-1:1
+    for t = 1:size(u, 4)
+        for k = 1:size(u, 3)
             slice = u(:,:,k,t);
-            slice = slice .* conj(ifft2(w .* fft2(slice)));
-            u(:,:,k,t) = slice;
+            u(:,:,k,t) = slice ./ ifft2(w .* fft2(slice));
         end
     end
 
 end
 
 
-function [w] = hann2d(sz, n)
-
-    s1 = sz(1);
-    s2 = sz(2);
+function [w] = window_(sz, n, wname, sigma)
 
     n1 = n(1);
     n2 = n(2);
+    n12 = floor(n1 / 2);
+    n22 = floor(n2 / 2);
 
-    x = circshift((0:n1-1)-floor((n1-1)/2), [0, -floor((n1-1)/2)]);
-    y = circshift((0:n2-1)-floor((n2-1)/2), [0, -floor((n2-1)/2)]);
-    x = .5 * (1 + cos((2*pi/n1) * x));
-    y = .5 * (1 + cos((2*pi/n2) * y));
+    x = [linspace(0, n12/n1, n12+1), linspace(-n12/n1, -1/n1, n12)].';
+    y = [linspace(0, n22/n2, n22+1), linspace(-n22/n2, -1/n2, n22)].';
 
-    kx = zeros(1, s1);
-    ky = zeros(1, s2);
+    switch wname
+        case 'hann'
+            x = hann_(x);
+            y = hann_(y);
+        case 'hamming'
+            x = hamming_(x);
+            y = hamming_(y);
+        case 'gaussian'
+            x = gaussian_(x, sigma(1));
+            y = gaussian_(y, sigma(2));
+    end
 
-    kx(1:ceil(n1/2)) = x(1:ceil(n1/2));
-    kx(s1-n1+(ceil(n1/2)+1):end) = x(ceil(n1/2)+1:end);
+    wx = zeros(sz(1), 1);
+    wy = zeros(sz(2), 1);
 
-    ky(1:ceil(n2/2)) = y(1:ceil(n2/2));
-    ky(s2-n2+(ceil(n2/2)+1):end) = y(ceil(n2/2)+1:end);
+    wx(1:n12+1) = x(1:n12+1);
+    wx(end-n12+1:end) = x(n12+2:end);
 
-    w = kx'*ky;
+    wy(1:n22+1) = y(1:n22+1);
+    wy(end-n22+1:end) = y(n22+2:end);
 
+    w = wx * wy.';
+
+end
+
+
+function [x] = hann_(x)
+    x = 0.5 .* (1 + cos(2*pi .* x));
+end
+
+
+function [x] = hamming_(x)
+    x = 0.54 + 0.46.*cos(2*pi .* x);
+end
+
+
+function [x] = gaussian_(x, sigma)
+    x = exp(-0.5 .* (x./sigma).^2);
 end
