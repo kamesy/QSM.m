@@ -53,7 +53,7 @@ function [fl] = pdf(f, mask, vsz, w, bdir, lambda, tol, maxit, verbose)
     fl = zeros(size(f), 'like', f);
 
     % get dipole kernel
-    D = dipoleKernel(size(m), vsz, bdir, 'i', class(f));
+    D = dipoleKernel(size(mask), vsz, bdir, 'i', class(f));
     D = psf2otf(D);
 
     % weights
