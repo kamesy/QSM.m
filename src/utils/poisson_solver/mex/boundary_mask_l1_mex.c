@@ -87,9 +87,9 @@ boundary_mask_l1(uint8_t *B,
         }
     }
 
-    #pragma omp parallel for private(i,j,k,l) schedule(static) \
-        if(nxny*nz > 32*32*32)
     for(size_t L1 = 1; L1 < l1; ++L1) {
+        #pragma omp parallel for private(i,j,k,l) schedule(static) \
+            if(nxny*nz > 32*32*32)
         for(k = L1*nxny; k < nxnynz-L1*nxny; k += nxny) {
             for(j = L1*nx; j < nxny-L1*nx; j += nx) {
                 l = L1 + j + k;
