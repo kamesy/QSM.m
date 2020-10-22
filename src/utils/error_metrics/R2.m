@@ -11,6 +11,6 @@ function [e] = R2(x, y, mask)
         y = y(mask);
     end
 
-    e = 1 - sum((x - y).^2) / sum((x - mean(x)).^2);
+    e = 1 - sum((x - y).^2) / sum((y - mean(y)).^2);
 
 end
