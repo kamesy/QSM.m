@@ -55,7 +55,11 @@ function [u] = unpadfastfft(u, sz0, padsize, direction)
             s0 = sz0(d);
             s1 = sz(d);
 
-            pad = nextfastfft(s0 + 2*padsize(d)) - s0;
+            if padsize(d) == 0
+                pad = 0;
+            else
+                pad = nextfastfft(s0 + 2*padsize(d)) - s0;
+            end
 
             odds0 = bitand(s0, 1);
             oddpad = bitand(pad, 1);
