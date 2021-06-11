@@ -28,10 +28,12 @@ function [u] = padfastfft(u, padsize, method, direction)
 
     if ~strcmpi(direction, 'both')
         pad = nextfastfft(sz + padsize) - sz;
+        pad(padsize == 0) = 0;
         u = padarray(u, pad, method, direction);
 
     else
         pad = nextfastfft(sz + 2*padsize) - sz;
+        pad(padsize == 0) = 0;
 
         oddsz = bitand(sz, 1);
         oddpad = bitand(pad, 1);
